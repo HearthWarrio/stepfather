@@ -1,12 +1,5 @@
 from abc import ABC, abstractmethod
-
-"""
-Exception as StepfatherException.
-Исключение, аналогичное StepfatherException.
-"""
-class StepfatherException(Exception):
-
-    pass
+import StepfatherException
 
 """
 Keyword abstract base class.

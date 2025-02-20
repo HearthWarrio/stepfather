@@ -2,10 +2,8 @@ import threading
 import traceback
 from collections import deque
 from typing import Set, Deque, Any
+import StepfatherException
 
-class StepfatherException(Exception):
-
-    pass
 """
 Exception handler.
 """
