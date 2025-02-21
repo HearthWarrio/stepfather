@@ -2,6 +2,23 @@
 <module type="PYTHON_MODULE" version="4">
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/stepfather-allure" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/stepfather-extentreports" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/stepfather-main" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/stepfather-main/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/stepfather-main/src/main" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/stepfather-main/src/main/hearthwarrio" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/stepfather-main/src/main/hearthwarrio/stepfather" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/stepfather-main/src/main/hearthwarrio/stepfather/annotation" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/stepfather-main/src/main/hearthwarrio/stepfather/aspect" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/stepfather-main/src/main/hearthwarrio/stepfather/core" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/stepfather-main/src/main/hearthwarrio/stepfather/core/function" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/stepfather-main/src/main/hearthwarrio/stepfather/core/sc" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/stepfather-main/src/main/hearthwarrio/stepfather/core/step" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/stepfather-qase" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/stepfather-report" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/stepfather-selene" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/stepfather-testit" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/.venv" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.13 (stepfather)" jdkType="Python SDK" />

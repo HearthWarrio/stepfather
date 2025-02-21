@@ -44,7 +44,7 @@ class CleanStackTrace(ExceptionHandler):
     """
     def __init__(self):
         # Префикс для фильтрации строк стека вызовов
-        stepfather_class_prefix = "com.hearthwarrio"
+        stepfather_class_prefix = "hearthwarrio"
         self.cached_exceptions = threading.local()  # thread-local для хранения очереди
         self.clean_stack_trace_element_filter = lambda frame: not frame.filename.startswith(stepfather_class_prefix)
 
