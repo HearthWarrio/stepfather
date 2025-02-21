@@ -1,18 +1,20 @@
-from typing import Protocol, TypeVar, Optional
+from typing import Protocol, TypeVar, Optional, cast
 
 T = TypeVar('T')
 R = TypeVar('R')
+E = TypeVar('E', bound=BaseException)
 
-class ThFunction(Protocol[T, R]):
+class ThFunction(Protocol[T, R, E]):
     def apply(self, t: T) -> R:
         """
-        Применяет функцию к данному аргументу.
-        Может выбрасывать исключение.
+        Применяет функцию к аргументу t.
+        Может выбрасывать исключение типа E.
         """
         ...
 
-def unchecked(function: Optional[ThFunction[T, R]]) -> Optional[ThFunction[T, R]]:
+def unchecked(function: Optional[ThFunction[T, R, E]]) -> Optional[ThFunction[T, R, Exception]]:
     """
-    Возвращает переданную ThFunction в "unchecked" виде или None, если function равен None.
+    Возвращает данную ThFunction, приведённую к варианту с исключением типа Exception,
+    либо None, если function равен None.
     """
-    return function
+    return cast(Optional[ThFunction[T, R, Exception]], function)
