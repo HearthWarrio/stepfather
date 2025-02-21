@@ -1,23 +1,30 @@
 import threading
 import traceback
+from abc import abstractmethod, ABC
 from collections import deque
-from typing import Set, Deque, Any
+from typing import Set, Deque, Any, TypeVar
 import StepfatherException
 
-"""
-Exception handler.
-"""
-class ExceptionHandler:
-
+class ExceptionHandler(ABC):
+    @abstractmethod
     def handle(self, exception: BaseException) -> None:
-        raise NotImplementedError("Method handle should be implemented")
+        """
+        Handles given exception.
+        Raises StepfatherException if exception arg is null.
+        """
+        pass
+
+T = TypeVar('T')
 
 class FixedMaxSizeUniqueQueue:
-
+    """
+    Очередь фиксированного размера с уникальными элементами.
+    Если очередь достигает max_size, самый старый элемент удаляется.
+    """
     def __init__(self, max_size: int = 10):
-        self.max_size: int = max_size
-        self.queue: Deque[Any] = deque()
-        self.set: Set[Any] = set()
+        self.max_size = max_size
+        self.queue = deque()
+        self.set = set()
 
     def offer(self, element: Any) -> bool:
         if element not in self.set:
@@ -28,23 +35,18 @@ class FixedMaxSizeUniqueQueue:
                 self.set.remove(oldest)
             return True
         return False
-"""
-Default ExceptionHandler implementation
-Обработчик исключений, который рекурсивно обходит все связанные исключения
-и "очищает" их стек вызовов, удаляя элементы, начинающиеся с определенного префикса.
-"""
+
 class CleanStackTrace(ExceptionHandler):
-
+    """
+    Реализация ExceptionHandler, которая рекурсивно обходит все связанные исключения,
+    очищает их стек вызовов (удаляет строки, начинающиеся с заданного префикса) и сохраняет
+    результат в атрибуте cleaned_traceback.
+    """
     def __init__(self):
-
-        self.stepfather_class_prefix = "com.hearthwarrio.stepfather"
-        self._thread_local = threading.local()
-
-    @property
-    def cached_exceptions(self) -> FixedMaxSizeUniqueQueue:
-        if not hasattr(self._thread_local, 'queue'):
-            self._thread_local.queue = FixedMaxSizeUniqueQueue()
-        return self._thread_local.queue
+        # Префикс для фильтрации строк стека вызовов
+        stepfather_class_prefix = "com.hearthwarrio"
+        self.cached_exceptions = threading.local()  # thread-local для хранения очереди
+        self.clean_stack_trace_element_filter = lambda frame: not frame.filename.startswith(stepfather_class_prefix)
 
     def handle(self, exception: BaseException) -> None:
         if exception is None:
@@ -52,31 +54,32 @@ class CleanStackTrace(ExceptionHandler):
         all_related_exceptions: Set[BaseException] = set()
         self.recursively_add_all_related_exceptions(all_related_exceptions, exception)
         for current_ex in all_related_exceptions:
-            if not isinstance(current_ex, StepfatherException) and self.cached_exceptions.offer(current_ex):
+            # Если исключение не является StepfatherException и добавляется в кэш
+            if not isinstance(current_ex, StepfatherException) and self.offer_cached_exception(current_ex):
                 if current_ex.__traceback__ is not None:
                     tb_list = traceback.extract_tb(current_ex.__traceback__)
-                    clean_tb_list = [
-                        frame for frame in tb_list
-                        if not frame.filename.startswith(self.Stepfather_class_prefix)
-                    ]
+                    clean_tb_list = [frame for frame in tb_list if self.clean_stack_trace_element_filter(frame)]
                     if len(clean_tb_list) != len(tb_list):
                         current_ex.cleaned_traceback = clean_tb_list
 
-    @staticmethod
-    def recursively_add_all_related_exceptions(exceptions: Set[BaseException], main_ex: BaseException) -> None:
+    def recursively_add_all_related_exceptions(self, exceptions: Set[BaseException], main_ex: BaseException) -> None:
         if main_ex in exceptions:
             return
         exceptions.add(main_ex)
         if main_ex.__cause__:
-            CleanStackTrace.recursively_add_all_related_exceptions(exceptions, main_ex.__cause__)
+            self.recursively_add_all_related_exceptions(exceptions, main_ex.__cause__)
         if main_ex.__context__:
-            CleanStackTrace.recursively_add_all_related_exceptions(exceptions, main_ex.__context__)
-"""
-Fake handler. Just checks that arg not null.
-Фиктивный обработчик исключений – просто проверяет, что аргумент не None.
-"""
-class Fake(ExceptionHandler):
+            self.recursively_add_all_related_exceptions(exceptions, main_ex.__context__)
 
+    def offer_cached_exception(self, exception: BaseException) -> bool:
+        if not hasattr(self.cached_exceptions, 'queue'):
+            self.cached_exceptions.queue = FixedMaxSizeUniqueQueue()
+        return self.cached_exceptions.queue.offer(exception)
+
+class FakeExceptionHandler(ExceptionHandler):
+    """
+    Фиктивная реализация ExceptionHandler – просто проверяет, что аргумент не null.
+    """
     def __init__(self):
         pass
 

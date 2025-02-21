@@ -1,6 +1,6 @@
-class StepfatherException(Exception):
+class TextFormatException(Exception):
     """
-    Stepfather exception.
+    Text format exception.
     """
     def __init__(self, message: str = None, cause: Exception = None):
         if message is None and cause is not None:
