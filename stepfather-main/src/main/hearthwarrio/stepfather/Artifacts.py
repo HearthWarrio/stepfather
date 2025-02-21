@@ -1,9 +1,9 @@
 from typing import Any, Dict, Optional, TypeVar
 
-from hearthwarrio.stepfather.core.step import StepObject
-from hearthwarrio.core.exception import StepfatherException
-from hearthwarrio.core.keyword import Keyword
-from hearthwarrio.core.function.ThFunction import ThFunction, unchecked
+from src.main.hearthwarrio.stepfather.core.step import StepObject
+from src.main.hearthwarrio.stepfather.core import StepfatherException
+from src.main.hearthwarrio.stepfather.core import Keyword
+from src.main.hearthwarrio.stepfather.core.function.ThFunction import ThFunction, unchecked
 
 S = TypeVar('S')  # S — тип, представляющий StepObject (можно ограничить bound=StepObject)
 
