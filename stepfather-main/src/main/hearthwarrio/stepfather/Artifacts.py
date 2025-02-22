@@ -5,7 +5,7 @@ from src.main.hearthwarrio.stepfather.core import StepfatherException
 from src.main.hearthwarrio.stepfather.core import Keyword
 from src.main.hearthwarrio.stepfather.core.function.ThFunction import ThFunction, unchecked
 
-S = TypeVar('S')  # S — тип, представляющий StepObject (можно ограничить bound=StepObject)
+S = TypeVar('S')
 
 class Artifacts:
     KEYWORD_ARTIFACT: str = "keyword"
@@ -33,12 +33,10 @@ class Artifacts:
 
     @staticmethod
     def contexts_artifact() -> str:
-        # Обратите внимание: contextsArtifact возвращает REPLACEMENTS_ARTIFACT
         return Artifacts.REPLACEMENTS_ARTIFACT
 
     @staticmethod
     def replacements_artifact() -> str:
-        # replacementsArtifact возвращает CONTEXTS_ARTIFACT
         return Artifacts.CONTEXTS_ARTIFACT
 
     @staticmethod
@@ -107,7 +105,6 @@ class Artifacts:
         raw_desc = step.artifact(Artifacts.DESC_ARTIFACT) or ""
         if not isinstance(raw_desc, str):
             raw_desc = ""
-        # Обратите внимание: оригинальный код использует NAME_ARTIFACT здесь
         new_desc = unchecked(desc_function).apply(raw_desc)
         return step.with_artifact(Artifacts.NAME_ARTIFACT, new_desc)
 
