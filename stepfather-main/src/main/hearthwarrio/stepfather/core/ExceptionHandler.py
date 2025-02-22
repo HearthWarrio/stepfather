@@ -43,9 +43,8 @@ class CleanStackTrace(ExceptionHandler):
     результат в атрибуте cleaned_traceback.
     """
     def __init__(self):
-        # Префикс для фильтрации строк стека вызовов
         stepfather_class_prefix = "hearthwarrio"
-        self.cached_exceptions = threading.local()  # thread-local для хранения очереди
+        self.cached_exceptions = threading.local()
         self.clean_stack_trace_element_filter = lambda frame: not frame.filename.startswith(stepfather_class_prefix)
 
     def handle(self, exception: BaseException) -> None:
@@ -54,7 +53,6 @@ class CleanStackTrace(ExceptionHandler):
         all_related_exceptions: Set[BaseException] = set()
         self.recursively_add_all_related_exceptions(all_related_exceptions, exception)
         for current_ex in all_related_exceptions:
-            # Если исключение не является StepfatherException и добавляется в кэш
             if not isinstance(current_ex, StepfatherException) and self.offer_cached_exception(current_ex):
                 if current_ex.__traceback__ is not None:
                     tb_list = traceback.extract_tb(current_ex.__traceback__)
